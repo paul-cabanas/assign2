@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Loading bar container */
+        .loading-container {
+            display: none; /* Initially hidden */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Loading bar animation */
+        .loading-bar {
+            width: 100px;
+            height: 10px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .loading-bar::before {
+            content: "";
+            position: absolute;
+            width: 30%;
+            height: 100%;
+            background-color: #007bff; /* Blue loading bar */
+            animation: loading-animation 1.5s infinite linear;
+        }
+
+        @keyframes loading-animation {
+            from { left: -30%; }
+            to { left: 100%; }
+        }
+    </style>
+    <script>
+        function showLoading() {
+            document.getElementById("loading-container").style.display = "block"; // Show loading bar
+            document.getElementById("login-form").submit(); // Submit the form
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <h1 style="font-size: 50px">UniX</h1>
+    </nav>
+    <h2>Student Login</h2>
+    <form action="logon" method="POST">
+        <p>
+            <label for="student no">Student number</label><br>
+            <input type="username" name="studentNo" required>
+        </p>
+        <p>
+          <label for="password">Password</label><br>
+          <input type="password" name="password" required>        
+        </p>
+        <button type="submit">Log In</button>
+    </form>
+
+    <!-- Loading bar (Initially hidden) -->
+    <div id="loading-container" class="loading-container">
+        <p>Logging in, please wait...</p>
+        <div class="loading-bar"></div>
+    </div>
+</body>
+</html>
