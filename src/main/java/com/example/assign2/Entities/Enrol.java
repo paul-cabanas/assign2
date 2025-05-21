@@ -1,6 +1,5 @@
 package com.example.assign2.Entities;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,28 +20,30 @@ import lombok.ToString;
 @ToString
 @Builder
 @Entity
-@Table(name = "Semester")
-public class Semester {
-
+@Table(name = "StudentCourseRegistration")
+public class Enrol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "stdNo")
+    private String stdNo;
+
+    @Column(name = "courseID")
+    private String courseID;
+
     @Column(name = "semesterID")
-    private Integer semesterId;
-
-    @Column(name = "semester")
-    private Integer semester;
-
-    @Column(name = "year")
-    private Integer year;
+    private Integer semesterID;
  
-    @Column(name = "open_for_enrolment")
-    private Boolean openForEnrolment;
+    @Column(name = "grade")
+    private String grade;
 
-    public Semester(int semester, int year, boolean openForEnrolment) {
-        this.semester = semester;
-        this.year = year;
-        this.openForEnrolment = openForEnrolment;
+    @Column (name = "mark")
+    private double mark;
+
+    public Enrol(String stdNo, String courseID, Integer semesterID){
+        this.stdNo = stdNo;
+        this.courseID = courseID;
+        this.semesterID = semesterID;
     }
-    
 }
+
 

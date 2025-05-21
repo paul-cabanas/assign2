@@ -10,7 +10,7 @@ public class UpdateSemesterRequest {
     private Integer id;
     private Integer semester;
     private Integer year;
-    private Integer openForEnrolment;
+    private boolean openForEnrolment;
 
 }
 

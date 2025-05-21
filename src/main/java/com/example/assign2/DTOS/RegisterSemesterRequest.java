@@ -7,10 +7,15 @@ import lombok.Data;
 
 @Data
 public class RegisterSemesterRequest {
-    @NotNull
     private Integer id;
     
     @NotBlank(message = "Name is required")
-    private String semester;
+    private int semester;
+
+    @NotBlank(message = "Year is required")
+    private int year;
+
+    @NotBlank(message = "Open for enrolment is required")
+    private boolean openForEnrolment;
 }
 

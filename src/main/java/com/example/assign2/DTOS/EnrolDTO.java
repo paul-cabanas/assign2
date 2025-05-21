@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SemesterDTO {
-    // @JsonProperty("emp_id")
-    private Integer id;
-    private Integer semester;
-    private Integer year;
-    private Boolean openForEnrolment;
+public class EnrolDTO {
+    private String stdNo;
+    private String courseID;
+    private Integer semesterID;
+    private String credits; 
+    private Double marks;
 }

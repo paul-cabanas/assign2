@@ -4,15 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.assign2.Controller.SemesterController;
+import com.example.assign2.Controller.Controller;
 
 
 @SpringBootApplication
 public class Assign2Application {
 
-	private final SemesterController semesterController;
+	private final Controller semesterController;
 
-    Assign2Application(SemesterController semesterController) {
+    Assign2Application(Controller semesterController) {
         this.semesterController = semesterController;
     }
 	public static void main(String[] args) {

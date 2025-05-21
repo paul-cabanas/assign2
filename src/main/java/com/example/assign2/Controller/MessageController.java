@@ -10,12 +10,12 @@ public class MessageController {
     @RequestMapping("/hello")
     public String sayHello()
     {
-        return "Welcome!";
+        return "This is SENG2050 Assignment 2!";
     }
 
     @RequestMapping("/hello2")
     public Message sayHelloWorld()
     {
-        return new Message("Hello World!");
+        return new Message("Good luck!");
     }
 }
