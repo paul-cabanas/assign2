@@ -1,5 +1,10 @@
-package com.example.assign2.Entities;
+/* 
+ * Assignment 2 - Web Engineering
+ * John Villegas (c3476534)
+ * Paul Cabanas (c3481070)
+ */
 
+package com.example.assign2.Entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,8 +40,7 @@ public class Course {
     @Column(name = "credits")
     private int credits;
 
-    public Course(String courseID)
-    {
-        this.courseId = courseID; 
+    public Course(String courseID) {
+        this.courseId = courseID;
     }
 }

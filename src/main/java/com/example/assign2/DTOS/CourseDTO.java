@@ -1,3 +1,9 @@
+/* 
+ * Assignment 2 - Web Engineering
+ * John Villegas (c3476534)
+ * Paul Cabanas (c3481070)
+ */
+
 package com.example.assign2.DTOS;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,10 +15,8 @@ import lombok.Getter;
 @Getter
 public class CourseDTO {
 
- // @JsonProperty("emp_id")
+    // @JsonProperty("emp_id")
     private String courseID;
     private String cName;
     private int credits;
 }
-
-

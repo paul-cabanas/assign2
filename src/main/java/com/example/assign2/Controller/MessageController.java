@@ -1,3 +1,9 @@
+/* 
+ * Assignment 2 - Web Engineering
+ * John Villegas (c3476534)
+ * Paul Cabanas (c3481070)
+ */
+
 package com.example.assign2.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -8,14 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MessageController {
 
     @RequestMapping("/hello")
-    public String sayHello()
-    {
+    public String sayHello() {
         return "This is SENG2050 Assignment 2!";
     }
 
     @RequestMapping("/hello2")
-    public Message sayHelloWorld()
-    {
+    public Message sayHelloWorld() {
         return new Message("Good luck!");
     }
 }

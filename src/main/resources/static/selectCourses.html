@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Select Semester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #ff7f7f, #0063ae, #ff7cb5, #ffec74);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    nav h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffffffcc;
+    }
+
+    form {
+      background: rgba(68, 68, 68, 0.514);
+      /* semi-transparent white */
+      backdrop-filter: blur(12px);
+      /* blur the background behind the form */
+      -webkit-backdrop-filter: blur(12px);
+      /* Safari support */
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      /* optional: soft inner border */
+    }
+
+
+    form p {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 8px;
+      background-color: #474747;
+      color: #fff;
+      font-size: 16px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 0px transparent;
+    }
+
+    input:focus,
+    input:hover {
+      outline: none;
+      box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+      background-color: #1f1f1f;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 0 10px transparent;
+    }
+
+    button:hover {
+      box-shadow: 0 0 15px #00bfff, 0 0 30px #00bfff;
+      transform: scale(1.02);
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      text-align: centre;
+      color: #00c6ff;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 0px transparent;
+      margin: 10px;
+      margin-left: 0;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #00e6e6;
+    }
+
+    .loading-container {
+      display: none;
+      text-align: centre;
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    .loading-bar {
+      width: 100px;
+      height: 10px;
+      background-color: #444;
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+      margin: 10px auto;
+    }
+
+    .loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 30%;
+      height: 100%;
+      background-color: #00bfff;
+      animation: loading-animation 1.5s infinite linear;
+    }
+
+    @keyframes loading-animation {
+      from {
+        left: -30%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #00ffaa;
+      text-align: centre;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <h1>UniX</h1>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+  </nav>
+
+  <h2>Select a Course</h2>
+
+  <div id="courseContainer"></div>
+  <form id="courseForm">
+    <label for="courseSelect">Select a course to enrol:</label>
+    <select id="courseSelect" required></select>
+    <button type="submit">Enrol</button>
+  </form>
+  <div class="loading-container" id="loadingContainer">
+    <div class="loading-bar"></div>
+    <p>Loading...</p>
+  </div>
+  <div id="result"></div>
+
+
+  <script>
+    // Handles logout functionality
+    function logout() {
+      localStorage.removeItem('accessToken');
+      fetch("https://localhost:8443/unix/logout", {
+        method: "POST",
+        credentials: "include"
+      }).then(() => {
+        window.location.href = "/loginStudent.html";
+      }).catch(() => {
+        // Even if logout fails, redirect to login
+        window.location.href = "/loginStudent.html";
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const stdNo = localStorage.getItem('stdNo');
+      const selectedSemesterId = localStorage.getItem('selectedSemesterId');
+      const token = localStorage.getItem('accessToken');
+
+      if (!stdNo || !selectedSemesterId || !token) {
+        alert("Missing session data. Please log in again.");
+        window.location.href = "/loginStudent.html";
+        return;
+      }
+
+      const url = `https://localhost:8443/unix/semesters/GetCourses?stdNo=${encodeURIComponent(stdNo)}&semester=${encodeURIComponent(selectedSemesterId)}`;
+
+      fetch(url, {
+        headers: {
+          "auth": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        credentials: "include"
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch courses");
+          }
+          return response.json();
+        })
+        .then(data => {
+          const courseSelect = document.getElementById("courseSelect");
+
+          // Populate dropdown with non-enrolled courses
+          data.courseList.forEach(course => {
+            if (!course.enrolled) {
+              const option = document.createElement("option");
+              option.value = course.courseNo;
+              option.textContent = `${course.courseNo} ${course.enrolled ? "(Enrolled)" : ""}`;
+              courseSelect.appendChild(option);
+            }
+          });
+
+          // Handle form submission
+          document.getElementById("courseForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const courseID = courseSelect.value;
+
+            const enrolment = {
+              stdNo: stdNo,
+              courseID: courseID,
+              semesterID: parseInt(selectedSemesterId)
+            };
+
+            fetch("https://localhost:8443/unix/enrol", {
+              method: "POST",
+              headers: {
+                "x-auth-token": token,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(enrolment)
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error("Failed to enrol");
+                }
+                return response.json();
+              })
+              .then(data => {
+                window.location.href = "/enrolment.html"; // Redirect to enrolment page on success
+                // Optionally remove the enrolled course from dropdown
+                courseSelect.querySelector(`option[value="${data.courseID}"]`)?.remove();
+              })
+              .catch(err => {
+                console.error("Enrolment error:", err);
+                alert("Enrolment failed. Please try again.");
+              });
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching courses:", error);
+          alert("Error loading course list. Please try again later.");
+        });
+    });
+
+  </script>
+</body>
+
+</html>

@@ -5,3 +5,19 @@ spring:
         url: jdbc:mysql://localhost:3306/UniX
         username: root
         password: P@ssword1
+
+#Enabling HTTPS
+
+server:
+    port: 8443
+    ssl:
+        enabled: true
+        key-store: classpath:keystore.jks
+        key-store-password: P@ssword1
+        key-store-type: JKS
+        key-alias: myserver
+
+jwt:
+  secret-key: my-secret-key
+  access-expiration-ms: 300000       # 5 minutes
+  refresh-expiration-ms: 3600000     # 1 hour

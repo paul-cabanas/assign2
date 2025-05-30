@@ -28,26 +28,17 @@ import lombok.ToString;
 @Entity
 @IdClass(StudentId.class)
 @Table(name = "Student")
-public class Student {
+public class StudentLogin {
+
     @Id
     @Column(name = "stdNo")
     private String stdNo;
 
-    @Column(name = "lastName")
-    private String lastName;
-
-    @Column(name = "givenNames")
-    private String givenNames;
+    @Column(name = "passwordSalt")
+    private String passwordSalt;
 
     @Column(name = "passwordHash")
-    private String passwordHash;
+    private String hashedPassword;
 
-    @Column(name = "passwordSalt")
-    private Double passwordSalt;
-
-    public Student(String stdNo, String lastName, String givenNames) {
-        this.stdNo = stdNo;
-        this.lastName = lastName;
-        this.givenNames = givenNames;
-    }
+    // Getters and Setters
 }

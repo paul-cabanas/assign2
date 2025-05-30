@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Enrolments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #ff7f7f, #0063ae, #ff7cb5, #ffec74);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    nav h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffffffcc;
+    }
+
+    form,
+    #courseContainer {
+      background: rgba(68, 68, 68, 0.514);
+      /* semi-transparent white */
+      backdrop-filter: blur(12px);
+      /* blur the background behind the form */
+      -webkit-backdrop-filter: blur(12px);
+      /* Safari support */
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      /* optional: soft inner border */
+    }
+
+
+    form p {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 8px;
+      background-color: #474747;
+      color: #fff;
+      font-size: 16px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 0px transparent;
+    }
+
+    input:focus,
+    input:hover {
+      outline: none;
+      box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+      background-color: #1f1f1f;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 0 10px transparent;
+    }
+
+    button:hover {
+      box-shadow: 0 0 15px #00bfff, 0 0 30px #00bfff;
+      transform: scale(1.02);
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      text-align: centre;
+      color: #00c6ff;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #00e6e6;
+    }
+
+    .loading-container {
+      display: none;
+      text-align: centre;
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    .loading-bar {
+      width: 100px;
+      height: 10px;
+      background-color: #444;
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+      margin: 10px auto;
+    }
+
+    .loading-bar::before {
+      content: "";
+      position: absolute;
+      width: 30%;
+      height: 100%;
+      background-color: #00bfff;
+      animation: loading-animation 1.5s infinite linear;
+    }
+
+    @keyframes loading-animation {
+      from {
+        left: -30%;
+      }
+
+      to {
+        left: 100%;
+      }
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #00ffaa;
+      text-align: centre;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <h1>UniX</h1>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+  </nav>
+
+  <h2>🎉 Congrats! You have successfully Enrolled! 🎉</h2>
+
+  <div id="courseContainer"></div>
+
+  <div class="loading-container" id="loadingContainer">
+    <div class="loading-bar"></div>
+    <p>Loading...</p>
+  </div>
+  <div id="result"></div>
+</body>
+<script>
+  function logout() {
+    localStorage.removeItem('accessToken');
+    fetch("https://localhost:8443/unix/student/logout", {
+      method: "POST",
+      credentials: "include"
+    });
+    window.location.href = "/loginStudent.html";
+  }
+
+
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const stdNo = localStorage.getItem("stdNo");
+    const selectedSemesterId = localStorage.getItem("selectedSemesterId");
+    const token = localStorage.getItem("accessToken");
+
+    const url = `https://localhost:8443/unix/semesters/GetCourses?stdNo=${encodeURIComponent(stdNo)}&semester=${encodeURIComponent(selectedSemesterId)}`;
+
+    const loadingContainer = document.getElementById("loadingContainer");
+    const courseContainer = document.getElementById("courseContainer");
+
+    fetch(url, {
+      headers: {
+        "auth": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      credentials: "include"
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+        return response.json();
+      })
+      .then(data => {
+        loadingContainer.style.display = "none";
+
+        const enrolledCourses = data.courseList.filter(course => course.enrolled);
+
+        if (enrolledCourses.length === 0) {
+          courseContainer.textContent = "You are not enrolled in any courses this semester.";
+          return;
+        }
+
+        const heading = document.createElement("h3");
+        heading.textContent = `Enrolled Courses for Semester ID: ${data.semesterId}`;
+        courseContainer.appendChild(heading);
+
+        const list = document.createElement("ul");
+
+        enrolledCourses.forEach(course => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${course.courseNo}` + ` - ${course.enrolled ? "Enrolled" : "Not Enrolled"}`;
+          list.appendChild(listItem);
+        });
+
+        courseContainer.appendChild(list);
+      })
+      .catch(error => {
+        loadingContainer.style.display = "none";
+        courseContainer.textContent = "Error loading course list. Please try again later.";
+        console.error("Fetch error:", error);
+      });
+  });
+</script>
+
+
+
+</html>

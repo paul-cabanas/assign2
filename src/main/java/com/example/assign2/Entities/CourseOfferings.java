@@ -1,3 +1,9 @@
+/* 
+ * Assignment 2 - Web Engineering
+ * John Villegas (c3476534)
+ * Paul Cabanas (c3481070)
+ */
+
 package com.example.assign2.Entities;
 
 import jakarta.persistence.*;
@@ -21,7 +27,6 @@ public class CourseOfferings {
     @ManyToOne
     @JoinColumn(name = "courseID", referencedColumnName = "courseID")
     private Course course;
-
 
     @Column(name = "max_capacity")
     private Integer maxCapacity;
